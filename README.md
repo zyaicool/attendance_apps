@@ -22,6 +22,7 @@ Install docker on wsl (windows only):
 4. run command sudo apt update to get all update
 5. run command sudo apt install -y docker.io to install docker on wsl
 6. run command sudo apt install -y docker.io docker-compose
+7. run command npm install
 
 how to run this services:
 1. make sure docker is install on device or using docker in wsl (for windows only)
