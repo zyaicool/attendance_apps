@@ -1,5 +1,6 @@
 const { sequelize, DataTypes } = require('../config/database');
 const Role = require('../models/roles');
+const bcrypt = require('bcryptjs');
 
 const User = sequelize.define('User', {
     id: {
@@ -58,6 +59,10 @@ const User = sequelize.define('User', {
 }, {
     tableName: 'users',
     timestamps: false,
+});
+
+User.beforeCreate(async(user) => {
+    user.password = await bcrypt.hash(user.password, 10);
 });
 
 
