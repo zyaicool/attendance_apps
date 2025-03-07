@@ -1,5 +1,5 @@
 const Role = require('../models/roles');
-const User = require('../models/users')
+const User = require('../models/users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const redisClient = require('../config/redis_client');
@@ -149,7 +149,7 @@ exports.login = async(req, res) => {
             process.env.JWT_SECRET, { expiresIn: '1h' }
         );
 
-        await redisClient.set(`user:${user.username}`, JSON.stringify({
+        await redisClient.setEx(`user:${user.username}`, 86400, JSON.stringify({
             id: user.id,
             username: user.username,
             role_id: user.role_id,
