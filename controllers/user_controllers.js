@@ -12,12 +12,12 @@ exports.createUser = async(req, res) => {
         const roleIdInt = parseInt(roleId, 10);
         //validate roleId is not empty
         if (isNaN(roleIdInt)) {
-            return res.status(400).json({ responseMessage: 'Invalid roleId' });
+            return res.status(400).json({ response_message: 'Invalid roleId' });
         }
 
         //check roleId value, must be 1 or 2
         if (![1, 2].includes(roleId)) {
-            return res.status(400).json({ responseMessage: 'roleId not exist.' });
+            return res.status(400).json({ response_message: 'roleId not exist.' });
         }
 
         const user = await User.create({
@@ -29,9 +29,9 @@ exports.createUser = async(req, res) => {
             updated_by: created_by
         });
 
-        res.status(200).json({ responseMessage: "Success" });
+        res.status(200).json({ response_message: "Success" });
     } catch (err) {
-        res.status(500).json({ responseMessage: err.message });
+        res.status(500).json({ response_message: err.message });
     }
 };
 
@@ -40,7 +40,7 @@ exports.updateUser = async(req, res) => {
         const { email } = req.body;
         const user = await User.findOne({ where: { id: req.params.id, deleted_at: null } });
         if (!user) {
-            return res.status(404).json({ responseMessage: 'User not found' });
+            return res.status(404).json({ response_message: 'User not found' });
         }
 
         updated_by = 99
@@ -48,9 +48,9 @@ exports.updateUser = async(req, res) => {
             email,
             updated_by
         });
-        res.status(200).json({ responseMessage: "Success" });
+        res.status(200).json({ response_message: "Success" });
     } catch (err) {
-        res.status(500).json({ responseMessage: err.message });
+        res.status(500).json({ response_message: err.message });
     }
 }
 
@@ -58,16 +58,16 @@ exports.deleteUser = async(req, res) => {
     try {
         const user = await User.findOne({ where: { id: req.params.id, deleted_at: null } });
         if (!user) {
-            return res.status(404).json({ responseMessage: 'User not found' });
+            return res.status(404).json({ response_message: 'User not found' });
         }
         deleted_by = 99
         await user.update({
             deleted_at: new Date(),
             deleted_by
         });
-        res.status(200).json({ responseMessage: 'Success' });
+        res.status(200).json({ response_message: 'Success' });
     } catch (error) {
-        res.status(500).json({ responseMessage: error.message });
+        res.status(500).json({ response_message: error.message });
     }
 };
 
@@ -103,7 +103,7 @@ exports.getUsers = async(req, res) => {
             }))
         });
     } catch (error) {
-        res.status(500).json({ responseMessage: error.message });
+        res.status(500).json({ response_message: error.message });
     }
 };
 
@@ -115,11 +115,11 @@ exports.getUserById = async(req, res) => {
             include: Role
         });
         if (!user) {
-            return res.status(404).json({ responseMessage: 'User not found' });
+            return res.status(404).json({ response_message: 'User not found' });
         }
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ responseMessage: error.message });
+        res.status(500).json({ response_message: error.message });
     }
 };
 
@@ -134,11 +134,11 @@ exports.login = async(req, res) => {
 
         const user = await User.findOne({ where: { username, deleted_at: null } });
         if (!user) {
-            return res.status(401).json({ responseMessage: 'Invalid username or password' });
+            return res.status(401).json({ response_message: 'Invalid username or password' });
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({ responseMessage: 'Invalid username or password' });
+            return res.status(401).json({ response_message: 'Invalid username or password' });
         }
 
         //generate JWT token
@@ -158,6 +158,6 @@ exports.login = async(req, res) => {
 
         res.status(200).json({ jwtToken: token });
     } catch (error) {
-        res.status(500).json({ responseMessage: error.message });
+        res.status(500).json({ response_message: error.message });
     }
 };

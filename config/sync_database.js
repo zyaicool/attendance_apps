@@ -13,6 +13,8 @@ async function syncDatabase() {
         console.log('Data role successfully insert!');
         await insertDataUser();
         console.log('Data user successfully insert!');
+        await insertDataParameter();
+        console.log('Data parameter successfully insert!');
     } catch (error) {
         console.error('Error syncing database:', error);
     }
@@ -62,6 +64,29 @@ async function insertDataUser() {
         }
     } catch (error) {
         console.error('Error inserting initial data user: ', error);
+    }
+}
+
+async function insertDataParameter() {
+    try {
+        const parameters = [
+            { parameter_name: 'timer_clock_in', parameter_value: '09:00', created_by: 99, updated_by: 99 },
+        ];
+
+        for (const parameter of parameters) {
+            const [existParameter, created] = await Parameter.findOrCreate({
+                where: { parameter_name: parameter.parameter_name },
+                defaults: parameter
+            });
+
+            if (created) {
+                console.log(`Parameter "${parameter.parameter_name}" created successfully.`);
+            } else {
+                console.log(`Parameter "${parameter.parameter_name}" already exists.`);
+            }
+        }
+    } catch (error) {
+        console.error('Error inserting initial data parameter: ', error);
     }
 }
 

@@ -1,3 +1,9 @@
+default user to login:
+{
+    "username":"admin",
+    "password":"tesbaru123"
+}
+
 command cek container run on docker
 - node service : docker exec -it attendance_services bash 
 - redis : redis-cli ping
