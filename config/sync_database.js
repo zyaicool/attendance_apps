@@ -11,6 +11,8 @@ async function syncDatabase() {
         console.log('Database synced successfully!');
         await insertDataRoles();
         console.log('Data role successfully insert!');
+        await insertDataUser();
+        console.log('Data user successfully insert!');
     } catch (error) {
         console.error('Error syncing database:', error);
     }
@@ -36,7 +38,30 @@ async function insertDataRoles() {
             }
         }
     } catch (error) {
-        console.error('Error inserting initial roles:', error);
+        console.error('Error inserting initial roles: ', error);
+    }
+}
+
+async function insertDataUser() {
+    try {
+        const users = [
+            { username: 'admin', password: 'tesbaru123', email: 'admin@mail.com', role_id: 1, created_by: 99, updated_by: 99 },
+        ];
+
+        for (const user of users) {
+            const [existUser, created] = await User.findOrCreate({
+                where: { username: user.username },
+                defaults: user
+            });
+
+            if (created) {
+                console.log(`User "${user.username}" created successfully.`);
+            } else {
+                console.log(`User "${user.username}" already exists.`);
+            }
+        }
+    } catch (error) {
+        console.error('Error inserting initial data user: ', error);
     }
 }
 
