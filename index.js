@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const syncDatabase = require('./config/sync_database');
 const userRoutes = require('./routes/user_routes');
 const parameterRoutes = require('./routes/parameter_routes');
+const attendanceRoutes = require('./routes/attendance_routes');
 
 const app = express();
 const port = process.env.PORT;
@@ -11,6 +12,7 @@ const port = process.env.PORT;
 app.use(bodyParser.json());
 app.use('/api', userRoutes);
 app.use('/api', parameterRoutes);
+app.use('/api', attendanceRoutes);
 
 async function startApp() {
     await syncDatabase();
