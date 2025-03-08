@@ -9,6 +9,15 @@ services:
       - .:/app
     ports:
       - "3000:3000"
+    environment:
+      PORT: 3000
+      JWT_SECRET_FILE: "/run/secrets/jwt_secret"
+      EMAIL_USER_FILE: "/run/secrets/email_user"
+      EMAIL_PASS_FILE: "/run/secrets/email_pass"
+    secrets:
+      - jwt_secret
+      - email_user
+      - email_pass
     command: [ "node", "index.js" ]
 
   redis:
@@ -44,3 +53,11 @@ services:
 
 volumes:
   mysql_data:
+
+secrets:
+  jwt_secret:
+    file: ./secrets/jwt_secret
+  email_user:
+    file: ./secrets/email_user
+  email_pass:
+    file: ./secrets/email_pass

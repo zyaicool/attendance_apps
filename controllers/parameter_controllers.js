@@ -57,10 +57,10 @@ exports.getParameters = async(req, res) => {
         });
 
         res.status(200).json({
-            total: parameters.count,
-            page,
-            limit,
-            parameters: parameters.rows.map(parameter => ({
+            total_records: parameters.count,
+            total_pages: Math.ceil(parameters.count / limit),
+            current_page: page,
+            data: parameters.rows.map(parameter => ({
                 id: parameter.id,
                 parameter_name: parameter.parameter_name,
                 parameter_value: parameter.parameter_value

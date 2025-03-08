@@ -3,6 +3,8 @@ const User = require('../models/users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const redisClient = require('../config/redis_client');
+const configEnv = require('../config/env_config');
+const jwtSecret = configEnv.jwtSecret
 
 exports.createUser = async(req, res) => {
     try {
@@ -93,10 +95,10 @@ exports.getUsers = async(req, res) => {
         });
 
         res.status(200).json({
-            total: users.count,
-            page,
-            limit,
-            users: users.rows.map(user => ({
+            total_records: users.count,
+            total_pages: Math.ceil(users.count / limit),
+            current_page: page,
+            data: users.rows.map(user => ({
                 id: user.id,
                 username: user.username,
                 email: user.email
@@ -142,11 +144,11 @@ exports.login = async(req, res) => {
         }
 
         //generate JWT token
-        if (!process.env.JWT_SECRET) {
+        if (!jwtSecret) {
             throw new Error("JWT_SECRET is not defined in the environment variables.");
         }
         const token = jwt.sign({ id: user.id, username: user.username, role_id: user.role_id },
-            process.env.JWT_SECRET, { expiresIn: '1h' }
+            jwtSecret, { expiresIn: '1h' }
         );
 
         await redisClient.setEx(`user:${user.username}`, 86400, JSON.stringify({

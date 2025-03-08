@@ -12,7 +12,7 @@ command cek container run on docker
 
 
 docker command:
-- build image : docker-compose up
+- build image : docker-compose up --build
 - check all container : docker ps -a
 - check log : docker logs <container_id>
 - rebuild : docker rm -f <container_id>
